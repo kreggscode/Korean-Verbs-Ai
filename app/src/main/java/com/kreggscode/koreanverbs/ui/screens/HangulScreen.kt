@@ -149,7 +149,7 @@ fun HangulScreen(navController: NavController) {
             AnimatedContent(
                 targetState = selectedTab,
                 transitionSpec = {
-                    fadeIn(tween(300)) with fadeOut(tween(300))
+                    fadeIn(tween(300)) togetherWith fadeOut(tween(300))
                 }
             ) { tab ->
                 LazyVerticalGrid(

@@ -76,7 +76,7 @@ fun HomeScreen(navController: NavController) {
             AnimatedContent(
                 targetState = isLoading,
                 transitionSpec = {
-                    fadeIn(tween(300)) with fadeOut(tween(300))
+                    fadeIn(tween(300)) togetherWith fadeOut(tween(300))
                 }
             ) { loading ->
                 if (loading) {
@@ -349,6 +349,37 @@ fun QuickActionsSection(navController: NavController) {
                     icon = Icons.Filled.Psychology,
                     gradientColors = listOf(PremiumAmber, PremiumPink),
                     onClick = { navController.navigate(Screen.AI.route) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                QuickActionCard(
+                    title = "Korean Culture",
+                    icon = Icons.Filled.Celebration,
+                    gradientColors = listOf(PremiumPurple, PremiumIndigo),
+                    onClick = { navController.navigate(Screen.KoreanCulture.route) },
+                    modifier = Modifier.weight(1f)
+                )
+                QuickActionCard(
+                    title = "Korean Cuisine",
+                    icon = Icons.Filled.LunchDining,
+                    gradientColors = listOf(PremiumPink, PremiumAmber),
+                    onClick = { navController.navigate(Screen.KoreanCuisine.route) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                QuickActionCard(
+                    title = "Basic Grammar",
+                    icon = Icons.Filled.MenuBook,
+                    gradientColors = listOf(PremiumTeal, PremiumEmerald),
+                    onClick = { navController.navigate(Screen.BasicGrammar.route) },
                     modifier = Modifier.weight(1f)
                 )
             }

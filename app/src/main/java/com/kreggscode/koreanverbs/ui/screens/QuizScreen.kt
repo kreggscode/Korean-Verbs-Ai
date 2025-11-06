@@ -65,7 +65,7 @@ fun QuizScreen(navController: NavController) {
         AnimatedContent(
             targetState = isQuizActive,
             transitionSpec = {
-                fadeIn(tween(400)) + slideInHorizontally(tween(400)) with
+                fadeIn(tween(400)) + slideInHorizontally(tween(400)) togetherWith
                 fadeOut(tween(200)) + slideOutHorizontally(tween(200))
             }
         ) { quizActive ->
@@ -263,7 +263,7 @@ fun DifficultySelector(
                     modifier = Modifier.weight(1f),
                     label = {
                         Text(
-                            difficulty.name.lowercase().capitalize(),
+                            difficulty.name.lowercase().replaceFirstChar { it.uppercaseChar() },
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
@@ -769,7 +769,7 @@ fun FlashcardQuiz(
                         AnimatedContent(
                             targetState = showAnswer,
                             transitionSpec = {
-                                fadeIn() + scaleIn() with fadeOut() + scaleOut()
+                                fadeIn() + scaleIn() togetherWith fadeOut() + scaleOut()
                             }
                         ) { showing ->
                             if (!showing) {

@@ -196,39 +196,35 @@
 </head>
 <body>
     <div class="container">
-        <h1>🇰🇷 Icon Generator</h1>
-        <p class="subtitle">Create stunning app icons for Korean Verbs AI</p>
+        <h1>🇰🇷 Korean Verbs AI - Icon Generator</h1>
+        <p class="subtitle">Generate beautiful 512×512 PNG icons for your app</p>
 
         <div class="canvas-container">
             <div class="canvas-wrapper">
                 <canvas id="icon512" width="512" height="512"></canvas>
-                <div class="canvas-label">512×512 (Play Store)</div>
-            </div>
-            <div class="canvas-wrapper">
-                <canvas id="icon192" width="192" height="192"></canvas>
-                <div class="canvas-label">192×192 (Launcher)</div>
+                <div class="canvas-label">512×512 PNG (Production Ready)</div>
             </div>
         </div>
 
         <div class="controls">
             <div class="control-group">
                 <label>Icon Text (Korean Character)</label>
-                <input type="text" id="iconText" value="한" maxlength="2" placeholder="Enter Korean character">
+                <input type="text" id="iconText" value="동" maxlength="2" placeholder="Enter Korean character">
                 <div class="preset-buttons">
-                    <button class="preset-btn" onclick="setIconText('한')">한</button>
+                    <button class="preset-btn" onclick="setIconText('동')">동 (Verb)</button>
+                    <button class="preset-btn" onclick="setIconText('한')">한 (Korean)</button>
                     <button class="preset-btn" onclick="setIconText('가')">가</button>
-                    <button class="preset-btn" onclick="setIconText('동')">동 (verb)</button>
                     <button class="preset-btn" onclick="setIconText('KV')">KV</button>
                 </div>
             </div>
 
             <div class="color-grid">
                 <div class="control-group">
-                    <label>Background Color 1</label>
+                    <label>Background Color 1 (Premium Indigo)</label>
                     <input type="color" id="bgColor1" value="#6366F1">
                 </div>
                 <div class="control-group">
-                    <label>Background Color 2</label>
+                    <label>Background Color 2 (Premium Purple)</label>
                     <input type="color" id="bgColor2" value="#8B5CF6">
                 </div>
             </div>
@@ -251,8 +247,7 @@
 
         <div class="button-group">
             <button class="btn btn-primary" onclick="generateIcon()">🎨 Generate Icon</button>
-            <button class="btn btn-secondary" onclick="downloadIcon(512)">⬇️ Download 512×512</button>
-            <button class="btn btn-secondary" onclick="downloadIcon(192)">⬇️ Download 192×192</button>
+            <button class="btn btn-secondary" onclick="downloadIcon(512)">⬇️ Download 512×512 PNG</button>
         </div>
     </div>
 
@@ -263,15 +258,14 @@
         }
 
         function generateIcon() {
-            const text = document.getElementById('iconText').value || '한';
+            const text = document.getElementById('iconText').value || '동';
             const bgColor1 = document.getElementById('bgColor1').value;
             const bgColor2 = document.getElementById('bgColor2').value;
             const textColor = document.getElementById('textColor').value;
             const style = document.getElementById('iconStyle').value;
 
-            // Generate both sizes
+            // Generate 512x512 only (production size)
             drawIcon('icon512', 512, text, bgColor1, bgColor2, textColor, style);
-            drawIcon('icon192', 192, text, bgColor1, bgColor2, textColor, style);
         }
 
         function drawIcon(canvasId, size, text, bgColor1, bgColor2, textColor, style) {

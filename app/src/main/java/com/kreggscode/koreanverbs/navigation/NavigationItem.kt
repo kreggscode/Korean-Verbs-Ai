@@ -60,4 +60,7 @@ sealed class Screen(val route: String) {
     object VerbCategory : Screen("verb_category/{category}") {
         fun createRoute(category: String) = "verb_category/$category"
     }
+    object KoreanCulture : Screen("korean_culture")
+    object KoreanCuisine : Screen("korean_cuisine")
+    object BasicGrammar : Screen("basic_grammar")
 }

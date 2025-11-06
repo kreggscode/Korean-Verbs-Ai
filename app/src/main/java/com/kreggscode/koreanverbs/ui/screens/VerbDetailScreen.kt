@@ -78,34 +78,51 @@ fun VerbDetailScreen(
         }
     }
     
-    // Load all verbs once and cache them
+    // Load all verbs once and cache them - MUST complete before showing verb
     LaunchedEffect(Unit) {
         scope.launch {
-            allVerbs = repository.getAllVerbs()
+            if (allVerbs.isEmpty()) {
+                allVerbs = repository.getAllVerbs()
+            }
+            // Once verbs are loaded, find and set the current verb immediately
+            if (allVerbs.isNotEmpty() && verb == null) {
+                val foundVerb = allVerbs.find { it.id == verbId } ?: repository.getVerbById(verbId)
+                verb = foundVerb
+                currentIndex = allVerbs.indexOfFirst { it.id == verbId }
+                isLoading = false
+            }
         }
     }
     
-    // Update current verb when verbId changes (fast - no reloading)
+    // Update current verb when verbId changes (instant - from cache)
     LaunchedEffect(verbId, allVerbs) {
         if (allVerbs.isNotEmpty()) {
-            scope.launch {
-                isLoading = true
-                val foundVerb = repository.getVerbById(verbId) ?: allVerbs.find { it.id == verbId }
-                verb = foundVerb
-                currentIndex = allVerbs.indexOfFirst { it.id == verbId }
-                // Reset AI explanation when verb changes
-                showExplanation = false
-                aiExplanation = ""
-                isLoading = false
-            }
+            // Instant update from cache - no loading state
+            val foundVerb = allVerbs.find { it.id == verbId } ?: repository.getVerbById(verbId)
+            verb = foundVerb
+            currentIndex = allVerbs.indexOfFirst { it.id == verbId }
+            // Reset AI explanation when verb changes
+            showExplanation = false
+            aiExplanation = ""
+            isLoading = false
+        } else if (allVerbs.isEmpty()) {
+            // Show loading only if verbs haven't loaded yet
+            isLoading = true
         }
     }
     
     fun navigateToVerb(index: Int) {
         if (index in allVerbs.indices) {
             val nextVerb = allVerbs[index]
+            // Instant navigation - replace current verb detail to prevent huge back stack
             navController.navigate(Screen.VerbDetail.createRoute(nextVerb.id)) {
-                popUpTo(Screen.VerbDetail.route) { inclusive = true }
+                // Replace current verb detail instead of adding to stack
+                // This prevents building up 20+ screens and glitchy back navigation
+                val currentRoute = navController.currentBackStackEntry?.destination?.route
+                if (currentRoute?.startsWith("verb_detail/") == true) {
+                    popUpTo(currentRoute) { inclusive = true }
+                }
+                launchSingleTop = true
             }
         }
     }
@@ -116,11 +133,8 @@ fun VerbDetailScreen(
             .background(MaterialTheme.colorScheme.background)
             .systemBarsPadding()
     ) {
-        AnimatedVisibility(
-            visible = !isLoading && verb != null,
-            enter = fadeIn(tween(400)) + slideInVertically(tween(400)),
-            exit = fadeOut(tween(200))
-        ) {
+        // Remove animations for instant display - prevents glitchy back navigation
+        if (!isLoading && verb != null) {
             verb?.let { currentVerb ->
                 Box(modifier = Modifier.fillMaxSize()) {
                     Column(
@@ -340,26 +354,34 @@ fun MainVerbCard(
                 .padding(24.dp)
         ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                // Korean Verb
+                // Korean Verb - with proper spacing and overflow handling
                 Text(
                     text = verb.verb,
                     fontSize = 48.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    lineHeight = 56.sp,
+                    maxLines = 2,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(horizontal = 16.dp)
                 )
                 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 
-                // Romanization
+                // Romanization - below Korean text, smaller size
                 Text(
                     text = verb.verbRomanization,
-                    fontSize = 20.sp,
+                    fontSize = 16.sp,
                     fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    maxLines = 2,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(horizontal = 16.dp)
                 )
                 
                 Spacer(modifier = Modifier.height(16.dp))

@@ -94,26 +94,24 @@ fun KoreanVerbsTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
+            // Set status bar color (deprecated in Android 16, but still functional)
+            @Suppress("DEPRECATION")
             window.statusBarColor = Color.Transparent.toArgb()
-            // Set navigation bar color to match gradient end color (blend of background + PremiumIndigo)
-            // This ensures system nav area matches app background instead of showing dark gray
+            // Set navigation bar color to match app background exactly
             val navBarColor = if (darkTheme) {
-                // Dark mode: blend of dark background + PremiumIndigo
-                Color(0xFF0A0A0A).copy(alpha = 0.95f)
+                // Dark mode: match dark background
+                colorScheme.surface
             } else {
-                // Light mode: blend of light background + PremiumIndigo - matches gradient end
-                // PremiumIndigo = 0xFF7C7CFF, background = 0xFFF5F5F7
-                // Blend: 92% background + 8% PremiumIndigo
-                val r = (0xF5 * 0.92 + 0x7C * 0.08).toInt() / 255f
-                val g = (0xF5 * 0.92 + 0x7C * 0.08).toInt() / 255f
-                val b = (0xF7 * 0.88 + 0xFF * 0.12).toInt() / 255f
-                Color(r, g, b, 0.96f)
+                // Light mode: match light background
+                colorScheme.background
             }
+            // Set navigation bar color (deprecated in Android 16, but still functional)
+            @Suppress("DEPRECATION")
             window.navigationBarColor = navBarColor.toArgb()
             // Set window background to transparent to prevent white background behind nav bar
             window.setBackgroundDrawableResource(android.R.color.transparent)
             
-            WindowCompat.getInsetsController(window, view)?.apply {
+            WindowCompat.getInsetsController(window, view).apply {
                 isAppearanceLightStatusBars = !darkTheme
                 isAppearanceLightNavigationBars = !darkTheme
             }

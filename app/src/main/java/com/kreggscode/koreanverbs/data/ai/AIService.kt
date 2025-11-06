@@ -189,7 +189,7 @@ class AIService(private val context: Context) {
     }
     
     private fun getFallbackResponse(userMessage: String): String {
-        val lowercaseMessage = userMessage.toLowerCase()
+        val lowercaseMessage = userMessage.lowercase()
         
         // Check if this is a verb explanation request - don't give generic response
         if (lowercaseMessage.contains("explain the korean verb") || 

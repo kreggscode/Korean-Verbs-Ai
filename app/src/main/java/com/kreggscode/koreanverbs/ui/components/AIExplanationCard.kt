@@ -100,7 +100,7 @@ fun AIExplanationCard(
                 )
             }
             
-            // Expanded Content
+            // Expanded Content - no extra padding at bottom
             AnimatedVisibility(
                 visible = isExpanded,
                 enter = fadeIn() + expandVertically(),
@@ -110,6 +110,7 @@ fun AIExplanationCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 16.dp)
+                        .padding(bottom = 0.dp) // Remove bottom padding to prevent gap
                 ) {
                     Divider(
                         color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
@@ -139,18 +140,13 @@ fun AIExplanationCard(
                             }
                         }
                     } else if (explanation.isNotEmpty()) {
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-                            ),
-                            shape = RoundedCornerShape(16.dp)
-                        ) {
-                            FormattedAIText(
-                                text = formatAIResponse(explanation),
-                                modifier = Modifier.padding(16.dp)
-                            )
-                        }
+                        // Seamless text display - no extra padding
+                        FormattedAIText(
+                            text = formatAIResponse(explanation),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 0.dp) // No bottom padding
+                        )
                     }
                 }
             }

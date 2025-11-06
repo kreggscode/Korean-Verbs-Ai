@@ -124,7 +124,7 @@ fun VerbsScreen(navController: NavController) {
             AnimatedContent(
                 targetState = viewMode,
                 transitionSpec = {
-                    fadeIn(tween(300)) with fadeOut(tween(300))
+                    fadeIn(tween(300)) togetherWith fadeOut(tween(300))
                 }
             ) { mode ->
                 when (mode) {
@@ -198,7 +198,12 @@ fun VerbsHeader(
         TextField(
             value = searchQuery,
             onValueChange = onSearchChange,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                    RoundedCornerShape(16.dp)
+                ),
             placeholder = { 
                 Text(
                     "Search verbs...",
@@ -224,8 +229,7 @@ fun VerbsHeader(
                 }
             },
             shape = RoundedCornerShape(16.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+            colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
@@ -518,24 +522,26 @@ fun VerbListItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Row(
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    Text(
-                        text = verb.verb,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = verb.verbRomanization,
-                        fontSize = 14.sp,
-                        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                        modifier = Modifier.padding(bottom = 2.dp)
-                    )
-                }
+                // Korean Verb - full width to prevent overlap
+                Text(
+                    text = verb.verb,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
+                    maxLines = 2,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                    lineHeight = 28.sp
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                // Romanization - below Korean text, smaller
+                Text(
+                    text = verb.verbRomanization,
+                    fontSize = 13.sp,
+                    fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    maxLines = 1,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = verb.englishMeaning,

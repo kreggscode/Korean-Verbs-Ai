@@ -66,14 +66,12 @@ fun KoreanVerbsNavigation(navController: NavHostController) {
             enterTransition = {
                 slideInHorizontally(
                     initialOffsetX = { 1000 },
-                    animationSpec = tween(400, easing = FastOutSlowInEasing)
-                ) + fadeIn(animationSpec = tween(400))
+                    animationSpec = tween(300, easing = FastOutSlowInEasing)
+                ) + fadeIn(animationSpec = tween(300))
             },
             exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { -1000 },
-                    animationSpec = tween(400, easing = FastOutSlowInEasing)
-                ) + fadeOut(animationSpec = tween(400))
+                // Remove exit animations for instant back navigation - prevents glitchy graphics
+                fadeOut(animationSpec = tween(100))
             }
         ) {
                 composable(Screen.Home.route) {
@@ -115,6 +113,17 @@ fun KoreanVerbsNavigation(navController: NavHostController) {
             composable(Screen.Scanner.route) {
                 ScannerScreen(navController = navController)
             }
+            
+            composable(Screen.KoreanCulture.route) {
+                KoreanCultureScreen(navController = navController)
+            }
+            
+        composable(Screen.KoreanCuisine.route) {
+            KoreanCuisineScreen(navController = navController)
+        }
+        composable(Screen.BasicGrammar.route) {
+            BasicGrammarScreen(navController = navController)
+        }
         }
         
         AnimatedVisibility(
@@ -151,10 +160,11 @@ fun FloatingNavigationBar(
     )
     val isDarkMode = isSystemInDarkTheme()
     
-    // Glassmorphic floating navigation bar - only horizontal padding, no vertical padding
+    // Glassmorphic floating navigation bar - positioned above Android navigation bar
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .navigationBarsPadding() // Add padding for Android system navigation bar
             .padding(horizontal = 24.dp)
             .padding(bottom = 16.dp)
     ) {

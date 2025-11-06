@@ -120,63 +120,82 @@ fun CameraView(navController: NavController) {
     
     // Real-time continuous scanning
     var lastProcessedTime by remember { mutableStateOf(0L) }
-    val scanInterval = 500L // Process every 500ms for real-time scanning
+    val scanInterval = 2000L // Process every 2 seconds to prevent constant processing
     
-    LaunchedEffect(scanMode, showResult) {
-        // Only scan continuously when not showing result
-        if (!showResult) {
+    // Timeout mechanism - reset processing if it takes too long
+    LaunchedEffect(isProcessing) {
+        if (isProcessing) {
+            kotlinx.coroutines.delay(3000) // 3 second timeout
+            if (isProcessing) {
+                isProcessing = false // Reset if still processing after timeout
+            }
+        }
+    }
+    
+    LaunchedEffect(scanMode, showResult, isProcessing) {
+        // Only scan continuously when not showing result and not currently processing
+        if (!showResult && !isProcessing) {
             imageAnalyzer.setAnalyzer(cameraExecutor) { imageProxy ->
-                val currentTime = System.currentTimeMillis()
-                if (currentTime - lastProcessedTime >= scanInterval && !isProcessing) {
-                    lastProcessedTime = currentTime
-                    isProcessing = true
-                    
-                    // Process the image
-                    processImage(
-                        imageProxy = imageProxy,
-                        scanMode = scanMode,
-                        onTextDetected = { text ->
-                            if (text.isNotEmpty()) {
-                                detectedText = text
-                                koreanTranslation = translateToKorean(text)
-                                showResult = true
+                try {
+                    val currentTime = System.currentTimeMillis()
+                    if (currentTime - lastProcessedTime >= scanInterval) {
+                        lastProcessedTime = currentTime
+                        isProcessing = true
+                        
+                        // Process the image with timeout protection
+                        processImage(
+                            imageProxy = imageProxy,
+                            scanMode = scanMode,
+                            onTextDetected = { text ->
+                                if (text.isNotEmpty()) {
+                                    detectedText = text
+                                    koreanTranslation = translateToKorean(text)
+                                    showResult = true
+                                }
+                                isProcessing = false // Always reset
+                            },
+                            onLabelsDetected = { labels ->
+                                if (labels.isNotEmpty()) {
+                                    detectedLabels = labels
+                                    val label = labels.first()
+                                    koreanTranslation = translateToKorean(label)
+                                    showResult = true
+                                }
+                                isProcessing = false // Always reset
+                            },
+                            onError = {
+                                isProcessing = false // Reset on error
                             }
-                            isProcessing = false
-                        },
-                        onLabelsDetected = { labels ->
-                            if (labels.isNotEmpty()) {
-                                detectedLabels = labels
-                                val label = labels.first()
-                                koreanTranslation = translateToKorean(label)
-                                showResult = true
-                            }
-                            isProcessing = false
-                        }
-                    )
+                        )
+                    } else {
+                        // Close immediately if not time to process yet
+                        imageProxy.close()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    imageProxy.close()
+                    isProcessing = false
                 }
-                imageProxy.close()
             }
         } else {
-            // Discard frames when showing result
+            // Discard frames when showing result or processing
             imageAnalyzer.setAnalyzer(cameraExecutor) { imageProxy ->
                 imageProxy.close()
             }
         }
     }
     
-    Box(modifier = Modifier.fillMaxSize()) {
-        AndroidView(
-            factory = { previewView },
-            modifier = Modifier.fillMaxSize()
-        ) { view ->
-            val cameraProvider = cameraProviderFuture.get()
-            val preview = Preview.Builder().build().also {
-                it.setSurfaceProvider(view.surfaceProvider)
-            }
-            
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-            
+    // Initialize camera once
+    LaunchedEffect(Unit) {
+        cameraProviderFuture.addListener({
             try {
+                val cameraProvider = cameraProviderFuture.get()
+                val preview = Preview.Builder().build().also {
+                    it.setSurfaceProvider(previewView.surfaceProvider)
+                }
+                
+                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+                
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
                     lifecycleOwner,
@@ -187,7 +206,14 @@ fun CameraView(navController: NavController) {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }
+        }, ContextCompat.getMainExecutor(context))
+    }
+    
+    Box(modifier = Modifier.fillMaxSize()) {
+        AndroidView(
+            factory = { previewView },
+            modifier = Modifier.fillMaxSize()
+        )
         
         // Overlay UI
         Column(
@@ -620,7 +646,8 @@ fun processImage(
     imageProxy: ImageProxy,
     scanMode: ScanMode,
     onTextDetected: (String) -> Unit,
-    onLabelsDetected: (List<String>) -> Unit
+    onLabelsDetected: (List<String>) -> Unit,
+    onError: () -> Unit = {}
 ) {
     try {
         val mediaImage = imageProxy.image
@@ -632,26 +659,53 @@ fun processImage(
                     val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
                     recognizer.process(image)
                         .addOnSuccessListener { visionText ->
-                            onTextDetected(visionText.text)
+                            val text = visionText.text.trim()
+                            if (text.isNotEmpty()) {
+                                onTextDetected(text)
+                            } else {
+                                onError() // No text detected
+                            }
+                            imageProxy.close()
                         }
                         .addOnFailureListener { e ->
                             e.printStackTrace()
+                            onError()
+                            imageProxy.close()
+                        }
+                        .addOnCompleteListener {
+                            imageProxy.close() // Ensure always closed
                         }
                 }
                 ScanMode.OBJECT -> {
                     val labeler = ImageLabeling.getClient(ImageLabelerOptions.DEFAULT_OPTIONS)
                     labeler.process(image)
                         .addOnSuccessListener { labels ->
-                            onLabelsDetected(labels.map { it.text })
+                            val validLabels = labels.filter { it.confidence > 0.5f }.map { it.text }
+                            if (validLabels.isNotEmpty()) {
+                                onLabelsDetected(validLabels)
+                            } else {
+                                onError() // No valid labels
+                            }
+                            imageProxy.close()
                         }
                         .addOnFailureListener { e ->
                             e.printStackTrace()
+                            onError()
+                            imageProxy.close()
+                        }
+                        .addOnCompleteListener {
+                            imageProxy.close() // Ensure always closed
                         }
                 }
             }
+        } else {
+            imageProxy.close()
+            onError()
         }
     } catch (e: Exception) {
         e.printStackTrace()
+        imageProxy.close()
+        onError()
     }
 }
 

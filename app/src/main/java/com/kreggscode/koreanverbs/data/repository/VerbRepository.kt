@@ -5,29 +5,38 @@ import com.kreggscode.koreanverbs.data.models.KoreanVerb
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
-import java.io.BufferedReader
-import java.io.InputStreamReader
+import java.nio.charset.StandardCharsets
 
 class VerbRepository(private val context: Context) {
-    private val json = Json { ignoreUnknownKeys = true }
+    private val json = Json { 
+        ignoreUnknownKeys = true
+        isLenient = true
+        coerceInputValues = true
+    }
     private var cachedVerbs: List<KoreanVerb>? = null
+    private var cachedCategories: List<String>? = null
     
+    // Optimized: Load JSON once and cache
     suspend fun getAllVerbs(): List<KoreanVerb> = withContext(Dispatchers.IO) {
         if (cachedVerbs == null) {
+            // Use buffered input stream for faster reading
             val inputStream = context.assets.open("korean_verbs.json")
-            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-            val jsonString = bufferedReader.use { it.readText() }
+            val jsonString = inputStream.bufferedReader(StandardCharsets.UTF_8).use { it.readText() }
             cachedVerbs = json.decodeFromString<List<KoreanVerb>>(jsonString)
         }
         cachedVerbs ?: emptyList()
     }
     
+    // Optimized: Cache categories separately for faster access
     suspend fun getCategories(): List<String> = withContext(Dispatchers.IO) {
-        getAllVerbs()
-            .map { it.category }
-            .distinct()
-            .filter { it.isNotBlank() && it.lowercase() != "category" }
-            .sorted()
+        if (cachedCategories == null) {
+            cachedCategories = getAllVerbs()
+                .map { it.category }
+                .distinct()
+                .filter { it.isNotBlank() && it.lowercase() != "category" }
+                .sorted()
+        }
+        cachedCategories ?: emptyList()
     }
     
     suspend fun getVerbsByCategory(category: String): List<KoreanVerb> = withContext(Dispatchers.IO) {

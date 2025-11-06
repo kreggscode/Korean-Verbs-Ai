@@ -42,8 +42,13 @@ class MainActivity : ComponentActivity() {
         splashScreen.setKeepOnScreenCondition { keepSplashScreen }
         
         // Enable edge-to-edge with FULLY transparent system bars
+        // Note: enableEdgeToEdge() automatically handles transparency in Android 16+
         enableEdgeToEdge()
+        
+        // Set transparent colors using WindowCompat for Android 16 compatibility
+        @Suppress("DEPRECATION")
         window.statusBarColor = android.graphics.Color.TRANSPARENT
+        @Suppress("DEPRECATION")
         window.navigationBarColor = android.graphics.Color.TRANSPARENT
         
         // Force navigation bar to be truly transparent
@@ -65,14 +70,22 @@ class MainActivity : ComponentActivity() {
                 var showSplash by remember { mutableStateOf(true) }
                 val view = androidx.compose.ui.platform.LocalView.current
                 
-                // Hide system navigation during splash for fullscreen
+                // Hide system navigation ONLY during splash for fullscreen
+                // Show navigation bars after splash
                 androidx.compose.runtime.SideEffect {
                     val window = (view.context as? android.app.Activity)?.window
-                    if (window != null && showSplash) {
-                        WindowCompat.getInsetsController(window, view)?.let { controller ->
+                    if (window != null) {
+                        val controller = WindowCompat.getInsetsController(window, view)
+                        if (showSplash) {
+                            // Hide during splash
                             controller.hide(WindowInsetsCompat.Type.navigationBars())
                             controller.systemBarsBehavior = 
                                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                        } else {
+                            // Show navigation bars after splash
+                            controller.show(WindowInsetsCompat.Type.navigationBars())
+                            controller.systemBarsBehavior = 
+                                WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
                         }
                     }
                 }

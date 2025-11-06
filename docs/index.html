@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Korean Verbs AI - Learn Korean verbs with AI assistance. Premium glassmorphic design with interactive learning features.">
+    <meta name="keywords" content="Korean, verbs, learning, AI, education, language, Hangul">
+    <meta name="author" content="KreggsCode">
+    <title>Korean Verbs AI - Premium Learning App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 3em;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .feature-description {
+            color: #666;
+            font-size: 1.05em;
+        }
+
+        .screenshots {
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .screenshots h2 {
+            font-size: 2.5em;
+            color: white;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .screenshot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .screenshot-placeholder {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            font-size: 1.2em;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 60px;
+            text-align: center;
+            color: white;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.8;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 40px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            min-width: 150px;
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .subtitle {
+                font-size: 1.1em;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🇰🇷 Korean Verbs AI</h1>
+            <p class="subtitle">Master Korean verbs with AI-powered learning and stunning design</p>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">1500+</div>
+                    <div class="stat-label">Korean Verbs</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">AI</div>
+                    <div class="stat-label">Powered Tutor</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Learning Modes</div>
+                </div>
+            </div>
+
+            <div class="cta-buttons">
+                <a href="https://play.google.com/store/apps/details?id=com.kreggscode.koreanverbs" class="btn btn-primary" target="_blank">
+                    📱 Download on Google Play
+                </a>
+                <a href="https://github.com/kreggscode/Korean-Verbs-Ai" class="btn btn-secondary" target="_blank">
+                    💻 View on GitHub
+                </a>
+            </div>
+        </header>
+
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">📚</div>
+                <h3 class="feature-title">Comprehensive Database</h3>
+                <p class="feature-description">Access 1500+ Korean verbs with romanization, meanings, and example sentences</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3 class="feature-title">AI Chat Assistant</h3>
+                <p class="feature-description">Get personalized help from our AI tutor powered by advanced language models</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">✨</div>
+                <h3 class="feature-title">Glassmorphic Design</h3>
+                <p class="feature-description">Experience premium UI with stunning animations and modern design</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-title">Interactive Quizzes</h3>
+                <p class="feature-description">Test your knowledge with multiple quiz modes and difficulty levels</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔤</div>
+                <h3 class="feature-title">Hangul Learning</h3>
+                <p class="feature-description">Master the Korean alphabet with interactive tracing and pronunciation</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📸</div>
+                <h3 class="feature-title">Object Scanner</h3>
+                <p class="feature-description">Scan real-world objects and learn their Korean translations instantly</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔊</div>
+                <h3 class="feature-title">Text-to-Speech</h3>
+                <p class="feature-description">Hear native Korean and English pronunciations for perfect learning</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🌙</div>
+                <h3 class="feature-title">Dark Mode</h3>
+                <p class="feature-description">Learn comfortably with beautiful light and dark themes</p>
+            </div>
+        </section>
+
+        <section class="screenshots">
+            <h2>App Screenshots</h2>
+            <div class="screenshot-grid">
+                <div class="screenshot-placeholder">Home Screen</div>
+                <div class="screenshot-placeholder">Verb Browser</div>
+                <div class="screenshot-placeholder">AI Chat</div>
+                <div class="screenshot-placeholder">Hangul Tracing</div>
+            </div>
+        </section>
+
+        <footer>
+            <h3>Korean Verbs AI</h3>
+            <p style="margin: 20px 0;">Learn Korean the smart way with AI assistance</p>
+            <p>Developer: <strong>KreggsCode</strong></p>
+            <p>Contact: <a href="mailto:kreg9da@gmail.com" style="color: white; text-decoration: underline;">kreg9da@gmail.com</a></p>
+            
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms & Conditions</a>
+                <a href="https://github.com/kreggscode/Korean-Verbs-Ai" target="_blank">GitHub</a>
+                <a href="https://play.google.com/store/apps/details?id=com.kreggscode.koreanverbs" target="_blank">Google Play</a>
+            </div>
+            
+            <p style="margin-top: 30px; opacity: 0.8;">© 2024 KreggsCode. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

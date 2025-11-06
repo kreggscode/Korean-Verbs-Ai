@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Beautiful Korean character design: stylized "동" (verb/action) -->
+    
+    <group
+        android:translateX="54"
+        android:translateY="54">
+        
+        <!-- Main character: modern "동" design -->
+        <!-- Left vertical bar -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M-22,-18 L-18,-18 L-18,22 L-22,22 Z"/>
+        
+        <!-- Top horizontal bar -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M-18,-18 L18,-18 L18,-14 L-18,-14 Z"/>
+        
+        <!-- Right vertical bar -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M18,-18 L22,-18 L22,22 L18,22 Z"/>
+        
+        <!-- Bottom horizontal bar -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M-22,18 L22,18 L22,22 L-22,22 Z"/>
+        
+        <!-- Inner circle (representing "ㅇ") -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M-6,2 A6,6 0 1,1 6,2 A6,6 0 1,1 -6,2 Z"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="2.5"/>
+        
+        <!-- Decorative accent elements -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:fillAlpha="0.7"
+            android:pathData="M-28,0 A3,3 0 1,1 -28,0 Z"/>
+        <path
+            android:fillColor="#FFFFFF"
+            android:fillAlpha="0.7"
+            android:pathData="M28,0 A3,3 0 1,1 28,0 Z"/>
+    </group>
+</vector>

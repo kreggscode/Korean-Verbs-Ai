@@ -5,12 +5,14 @@
 ### Master Korean Verbs with AI-Powered Learning
 
 [![Google Play](https://img.shields.io/badge/Google%20Play-Download-green?style=for-the-badge&logo=google-play)](https://play.google.com/store/apps/details?id=com.kreggscode.koreanverbs)
+[![Website](https://img.shields.io/badge/Website-Orchid%20AI-purple?style=for-the-badge&logo=google-chrome)](https://kreggscode.github.io/Korean-Verbs-Ai/)
+[![Privacy Policy](https://img.shields.io/badge/Privacy-Policy-orange?style=for-the-badge&logo=readme)](https://kreggscode.github.io/Korean-Verbs-Ai/privacy.html)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github)](https://github.com/kreggscode/Korean-Verbs-Ai)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
-A visually stunning Android application for learning Korean verbs with AI assistance, featuring glassmorphic UI design and premium animations.
+A production-grade Android application for learning Korean with AI assistance, premium glassmorphic UI, and cultural immersion content.
 
-[Download on Google Play](https://play.google.com/store/apps/details?id=com.kreggscode.koreanverbs) • [View Documentation](https://kreggscode.github.io/Korean-Verbs-Ai/) • [Report Bug](https://github.com/kreggscode/Korean-Verbs-Ai/issues)
+[Download on Google Play](https://play.google.com/store/apps/details?id=com.kreggscode.koreanverbs) • [Official Website](https://kreggscode.github.io/Korean-Verbs-Ai/) • [Privacy Policy](https://kreggscode.github.io/Korean-Verbs-Ai/privacy.html) • [Report Bug](https://github.com/kreggscode/Korean-Verbs-Ai/issues)
 
 </div>
 
@@ -19,30 +21,35 @@ A visually stunning Android application for learning Korean verbs with AI assist
 ## 🎨 Features
 
 ### **Core Features**
-- 📚 **Comprehensive Verb Database**: 1500+ Korean verbs with pronunciations and examples
-- 🤖 **AI Chat Assistant**: Powered by Pollinations AI for personalized learning
-- 📱 **Glassmorphic Design**: Premium UI with stunning animations and blur effects
-- 🎯 **Interactive Quizzes**: Multiple choice, flashcards, and time challenges
-- 🔤 **Hangul Learning**: Interactive tracing and pronunciation guide
-- 📸 **Object Scanner**: Real-time object detection and Korean translation
-- 🔊 **Text-to-Speech**: Native Korean and English pronunciation
+- 📚 **Comprehensive Verb Database**: 1,898+ curated verbs with Hangul, romanization, English meanings, and usage notes
+- 🤖 **AI Chat Assistant**: Real-time tutoring powered by Pollinations AI with explanation, conjugation, and cultural context support
+- 📱 **Premium Glassmorphic Design**: Responsive layout, adaptive themes, and motion-rich interactions
+- 🎯 **Interactive Quizzes**: Multiple difficulty modes, flashcards, time challenges, and progress analytics
+- 🔤 **Hangul Learning**: Alphabet explorer with pronunciation audio and practice tips
+- 🍲 **Korean Culture & Cuisine Hubs**: Encyclopedia-style tabs covering festivals, etiquette, popular dishes, and more
+- 📘 **Basic Grammar Guide**: Honorifics, particles, verb endings, and tense breakdowns in approachable modules
+- 📸 **Object & Text Scanner**: ML Kit powered recognition with 16 KB aligned native binaries for Android 15+ devices
+- 🔊 **Text-to-Speech Everywhere**: Native audio for Hangul and English across the app
 
-### **Screens**
-1. **Home Screen**: Quick stats, categories showcase, featured learning
-2. **Verbs Screen**: Browse by category, search functionality
-3. **Verb Detail**: Conjugations, examples, TTS support
-4. **Hangul Screen**: Learn Korean alphabet with tracing
-5. **Quiz Screen**: Multiple game modes with difficulty levels
-6. **AI Chat**: Real-time Korean language assistance
-7. **Scanner**: Camera-based object recognition
+### **Screens & Modules**
+1. **Home Dashboard** – Daily streaks, verb stats, quick actions to Grammar/Culture/Cuisine modules
+2. **Verbs Explorer** – Category filters, search, favorites, offline caching for 16 KB devices
+3. **Verb Detail** – TTS, conjugation tables, AI explanation card, previous/next navigation carousel
+4. **Hangul Studio** – Tabs for vowels, consonants, pronunciation guides, custom animations
+5. **Quiz Lab** – Flashcards, MCQs, time attack, adaptive difficulty, performance summaries
+6. **AI Tutor** – Conversational assistant with history, knowledge cut-off awareness, and voice reply
+7. **Culture Encyclopedia** – Overview, festivals, traditions, etiquette, facts in glassmorphic cards
+8. **Cuisine Guide** – Popular, famous, regular dishes plus likes/dislikes insight tabs
+9. **Basic Grammar** – Basics, particles, verb endings, honorifics, tenses with examples
+10. **Scanner Studio** – ML Kit image labeling and OCR with safety timeouts and retry logic
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Android Studio Arctic Fox or later
-- Android SDK 34
-- Kotlin 1.9.20
-- Java 17
+- Android Studio Ladybug | 2024.2.1 or newer
+- Android SDK 36 (Android 16)
+- Kotlin 1.9.20 (bundled with AGP 8.13.0)
+- Java 17 (JDK 17+)
 
 ### Installation
 
@@ -58,8 +65,8 @@ cd "Korean verbs AI"
 - Navigate to the project directory
 
 3. **Build the project**
-- Let Gradle sync complete
-- Build > Make Project
+- Let Gradle sync complete (AGP 8.13.0)
+- Build > Make Project (or `./gradlew assembleDebug`)
 
 4. **Run the app**
 - Connect Android device or start emulator
@@ -68,15 +75,14 @@ cd "Korean verbs AI"
 ## 🏗️ Architecture
 
 ### Tech Stack
-- **Language**: Kotlin
-- **UI Framework**: Jetpack Compose
-- **Architecture**: MVVM + Clean Architecture
-- **Dependency Injection**: Manual (can add Hilt)
-- **Network**: Ktor Client
-- **AI Integration**: Pollinations AI API
-- **ML Kit**: Text Recognition, Image Labeling
-- **Camera**: CameraX
-- **Animations**: Compose Animations + Lottie
+- **Language**: Kotlin (JVM 17 target)
+- **UI**: Jetpack Compose Material 3 + custom glassmorphism kit
+- **Architecture**: MVVM + modular repositories
+- **Networking / AI**: Ktor Client + Pollinations AI helpers
+- **Persistence**: DataStore + cached JSON assets
+- **Vision**: ML Kit (text recognition 16.0.1, image labeling 17.0.9) with 16 KB aligned binaries
+- **Camera**: CameraX 1.4.0 pipeline
+- **Animations**: Compose animation APIs & physics-based transitions
 
 ### Project Structure
 ```
@@ -103,19 +109,19 @@ app/
 ## 🎨 Design System
 
 ### Color Palette
-- **Primary**: Indigo (#6366F1)
-- **Secondary**: Purple (#8B5CF6)
-- **Accent**: Pink (#EC4899)
-- **Teal**: (#14B8A6)
-- **Glassmorphic Effects**: White/Black with alpha
+- **Primary**: Premium Indigo (#6366F1)
+- **Secondary**: Premium Purple (#8B5CF6)
+- **Accent**: Premium Pink (#EC4899)
+- **Support**: Teal (#14B8A6), Emerald (#10B981), Amber (#F59E0B)
+- **Glassmorphic Effects**: White/Black overlays with 0.03–0.15 alpha
 
 ### Components
-- `GlassmorphicCard`: Frosted glass effect cards
-- `AnimatedGradientButton`: Gradient animated buttons
-- `PremiumCard`: Elevated gradient border cards
-- `PulsingIcon`: Breathing animation icons
-- `AnimatedProgressBar`: Smooth progress indicators
-- `FloatingNavigationBar`: Glass effect bottom nav
+- `GlassmorphicCard`: Frosted surfaces with dynamic blur
+- `AnimatedGradientButton`: Gradient shimmer CTA buttons
+- `PremiumCard`: Elevated cards with soft shadows
+- `PulsingIcon`: Breathing icon animation for attention cues
+- `AnimatedProgressBar`: Smooth loading states and quiz timers
+- `FloatingNavigationBar`: Edge-to-edge glass navigation with system bar padding
 
 ## 📱 Screenshots
 
@@ -132,26 +138,21 @@ The app features:
 The app uses Pollinations AI which doesn't require API keys for basic usage.
 
 ### Permissions Required
-- `INTERNET`: For AI features and API calls
-- `CAMERA`: For object scanner feature
-- `VIBRATE`: For haptic feedback
+- `INTERNET` – AI explanations, culture/grammar updates
+- `CAMERA` – Scanner and OCR features
+- `VIBRATE` – Haptic guidance
 
 ## 🚦 Building for Production
 
-1. **Generate signed APK**
-```
-Build > Generate Signed Bundle/APK
-```
-
-2. **Configure ProGuard**
-Already configured in `build.gradle.kts`
-
-3. **Set version**
-Update in `app/build.gradle.kts`:
-```kotlin
-versionCode = 1
-versionName = "1.0"
-```
+1. **Generate signed App Bundle**
+   - `Build > Generate Signed Bundle / APK > Android App Bundle`
+2. **R8 & ProGuard**
+   - Rules are pre-configured (`proguard-rules.pro`, ML Kit keep rules included)
+3. **Versioning**
+   - Update `versionCode` / `versionName` in `app/build.gradle.kts`
+4. **16 KB Compliance**
+   - ML Kit native libs updated to 16 KB aligned variants (verified with `llvm-objdump`)
+   - Build with `./gradlew clean bundleRelease`
 
 ## 🤝 Contributing
 
@@ -176,6 +177,8 @@ This project is licensed under the MIT License.
 
 - **Email**: kreg9da@gmail.com
 - **Developer**: KreggsCode
+- **Website**: [Official Site](https://kreggscode.github.io/Korean-Verbs-Ai/)
+- **Privacy Policy**: [https://kreggscode.github.io/Korean-Verbs-Ai/privacy.html](https://kreggscode.github.io/Korean-Verbs-Ai/privacy.html)
 - **Issues**: [GitHub Issues](https://github.com/kreggscode/Korean-Verbs-Ai/issues)
 - **Documentation**: [Project Docs](https://kreggscode.github.io/Korean-Verbs-Ai/)
 
@@ -183,4 +186,4 @@ This project is licensed under the MIT License.
 
 **Package Name**: `com.kreggscode.koreanverbs`  
 **Min SDK**: 24 (Android 7.0)  
-**Target SDK**: 34 (Android 14)
+**Target SDK**: 36 (Android 16)

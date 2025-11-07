@@ -9,11 +9,16 @@ android {
     namespace = "com.kreggscode.koreanverbs"
     compileSdk = 36
 
+    // NDK r28+ is required for 16 KB page size support
+    // AGP 8.13.0 should use compatible NDK automatically, but we ensure it's set
+    // Check your installed NDK version in Android Studio: Tools > SDK Manager > SDK Tools > NDK
+    // Common versions: "28.0.12674087" or "27.0.12077987" (r28+ required)
+
     defaultConfig {
         applicationId = "com.kreggscode.koreanverbs"
         minSdk = 24
         targetSdk = 36
-        versionCode = 5
+        versionCode = 7
         versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -26,12 +31,6 @@ android {
         }
     }
     
-    packaging {
-        jniLibs {
-            useLegacyPackaging = true
-        }
-    }
-
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -49,7 +48,7 @@ android {
     
     splits {
         abi {
-            isEnable = true
+            isEnable = false  // Disabled for AAB builds - bundles handle architectures automatically
             reset()
             include("armeabi-v7a", "arm64-v8a")
             isUniversalApk = true
@@ -91,8 +90,10 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+        // useLegacyPackaging removed - using uncompressed libraries for 16 KB page size support
+        // AGP 8.5.1+ automatically handles 16 KB alignment with uncompressed libraries
         jniLibs {
-            useLegacyPackaging = true
+            useLegacyPackaging = false  // Explicitly set to false for 16 KB support
         }
     }
 }
@@ -141,15 +142,17 @@ dependencies {
     // Coil for image loading
     implementation("io.coil-kt:coil-compose:2.5.0")
     
-    // CameraX for scanner
-    implementation("androidx.camera:camera-core:1.3.1")
-    implementation("androidx.camera:camera-camera2:1.3.1")
-    implementation("androidx.camera:camera-lifecycle:1.3.1")
-    implementation("androidx.camera:camera-view:1.3.1")
+    // CameraX for scanner - updated for 16 KB compatible native binaries
+    implementation("androidx.camera:camera-core:1.4.0")
+    implementation("androidx.camera:camera-camera2:1.4.0")
+    implementation("androidx.camera:camera-lifecycle:1.4.0")
+    implementation("androidx.camera:camera-view:1.4.0")
     
-    // ML Kit for text recognition
-    implementation("com.google.mlkit:text-recognition:16.0.0")
-    implementation("com.google.mlkit:image-labeling:17.0.7")
+    // ML Kit for text recognition - updated for 16 KB compliant native libs
+    implementation("com.google.mlkit:text-recognition:16.0.1")
+    implementation("com.google.mlkit:image-labeling:17.0.9")
+    implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.1")
+    implementation("com.google.android.gms:play-services-mlkit-text-recognition-common:19.0.1")
     
     // Lottie removed to reduce app size
     
